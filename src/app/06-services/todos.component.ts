@@ -21,4 +21,10 @@ export class TodosComponent {
       err => (this.message = err)
     );
   }
+
+  delete(id) {
+    if (confirm("Are you sure?")) {
+      this.service.delete(id).subscribe();
+    }
+  }
 }

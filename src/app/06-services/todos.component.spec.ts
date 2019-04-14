@@ -70,4 +70,30 @@ describe("TodosComponent", () => {
     //Assert
     expect(component.message).toBe(error);
   });
+
+  it("should call the server to delete a todo item if the user confirms", () => {
+    //In this test we want to change the implementation of "window.confirm()" because we do not want to display a window during the unit test. spyOn helps with this!
+
+    //Arrange
+    spyOn(window, "confirm").and.returnValue(true); //if the user confirm then call the server
+    let spy = spyOn(service, "delete").and.returnValue(empty());
+
+    //Act
+    component.delete(1);
+
+    //Assert
+    expect(spy).toHaveBeenCalledWith(1);
+  });
+
+  it("should NOT call the server to delete a todo item if the user cancels", () => {
+    //Arrange
+    spyOn(window, "confirm").and.returnValue(false); //if the user cancels
+    let spy = spyOn(service, "delete").and.returnValue(empty());
+
+    //Act
+    component.delete(1);
+
+    //Assert
+    expect(spy).not.toHaveBeenCalled();
+  });
 });
