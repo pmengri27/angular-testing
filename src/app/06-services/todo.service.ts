@@ -1,17 +1,12 @@
 import { Http } from "@angular/http";
 
-// import { Injectable } from "@angular/core";
-// import { HttpClient } from "@angular/common/http";
-// import { Todo } from "../models/Todo";
+import { map, catchError } from "rxjs/operators";
+import { Observable, pipe, from, of } from "rxjs";
 
-// @Injectable()
-// export class TodoService {
-//   todosUrl: string = "https://jsonplaceholder.typicode.com/todos?_limit=2";
+export class TodoService {
+  constructor(private http: Http) {}
 
-//   constructor(private http: HttpClient) {}
-
-//   // Get Todos
-//   getTodos() {
-//     return this.http.get<Todo[]>(`${this.todosUrl}`);
-//   }
-// }
+  getTodos() {
+    return this.http.get("...").pipe(map(r => r.json()));
+  }
+}
