@@ -9,4 +9,12 @@ export class TodoService {
   getTodos() {
     return this.http.get("...").pipe(map(r => r.json()));
   }
+
+  add(todo) {
+    return this.http.post("...", todo).pipe(map(r => r.json()));
+  }
+
+  delete(id) {
+    return this.http.delete("...").pipe(map(r => r.json()));
+  }
 }

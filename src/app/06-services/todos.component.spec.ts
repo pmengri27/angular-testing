@@ -3,7 +3,7 @@
 
 import { TodosComponent } from "./todos.component";
 import { TodoService } from "./todo.service";
-import { Observable, pipe, from, of } from "rxjs";
+import { Observable, pipe, from, of, empty, throwError } from "rxjs";
 
 describe("TodosComponent", () => {
   let component: TodosComponent;
@@ -32,5 +32,42 @@ describe("TodosComponent", () => {
 
     //Assert
     expect(component.todos).toBe(todos);
+  });
+
+  it("should call the server to save the changes when a new todo item is added", () => {
+    //Arrange
+    let spy = spyOn(service, "add").and.callFake(t => {
+      return empty();
+    });
+
+    //Act
+    component.add();
+
+    //Assert
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should add the new todo returned from the server", () => {
+    //Arrange
+    let todo = { id: 1 };
+    let spy = spyOn(service, "add").and.returnValue(from([todo]));
+
+    //Act
+    component.add();
+
+    //Assert
+    expect(component.todos.indexOf(todo)).toBeGreaterThan(-1);
+  });
+
+  it("should set the message property if server returns an error when adding a new todo ", () => {
+    //Arrange
+    let error = "error from the server";
+    let spy = spyOn(service, "add").and.returnValue(throwError(error));
+
+    //Act
+    component.add();
+
+    //Assert
+    expect(component.message).toBe(error);
   });
 });
